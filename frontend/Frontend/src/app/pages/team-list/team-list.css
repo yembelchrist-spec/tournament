@@ -1,0 +1,222 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.dashboard {
+  display: flex; min-height: 100vh;
+  background: #0a0a0f;
+  font-family: 'Barlow', sans-serif;
+  color: #e8e8f0;
+}
+
+.sidebar {
+  width: 230px; flex-shrink: 0;
+  background: #12121a;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  display: flex; flex-direction: column;
+  padding: 28px 0;
+  position: sticky; top: 0; height: 100vh;
+}
+.sidebar-logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.6rem; letter-spacing: 0.1em;
+  color: #F0B429; padding: 0 22px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-logo span { color: #e8e8f0; }
+.sidebar-section {
+  font-size: 0.65rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.18em;
+  color: rgba(232,232,240,0.3); padding: 22px 22px 8px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 22px; color: rgba(232,232,240,0.5);
+  font-size: 0.87rem; font-weight: 500;
+  cursor: pointer; text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+}
+.nav-item:hover {
+  color: #e8e8f0; background: rgba(255,255,255,0.03);
+}
+.nav-item.active {
+  color: #F0B429; border-left-color: #F0B429;
+  background: rgba(240,180,41,0.06);
+}
+.sidebar-footer {
+  margin-top: auto; padding: 16px 22px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.btn-back {
+  color: rgba(232,232,240,0.5); text-decoration: none;
+  font-size: 0.82rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  transition: color 0.2s;
+}
+.btn-back:hover { color: #F0B429; }
+
+.main { flex: 1; padding: 36px 40px; overflow-y: auto; }
+
+.page-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; margin-bottom: 28px;
+}
+.page-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 2.2rem; letter-spacing: 0.05em;
+}
+.page-sub {
+  font-size: 0.85rem;
+  color: rgba(232,232,240,0.5); margin-top: 4px;
+}
+.header-btns { display: flex; gap: 10px; }
+
+.btn-create {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #F0B429; color: #0a0a0f;
+  border: none; border-radius: 2px;
+  padding: 11px 20px; text-decoration: none;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-create:hover { background: #f5c444; }
+
+.btn-secondary {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e8e8f0; border-radius: 2px;
+  padding: 11px 20px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-secondary:hover {
+  border-color: #F0B429; color: #F0B429;
+}
+
+/* FORM CARD */
+.form-card {
+  background: #12121a;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 4px; padding: 24px;
+  margin-bottom: 24px;
+}
+.form-card-title {
+  font-size: 0.85rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 16px; color: #F0B429;
+}
+.form-row {
+  display: flex; gap: 16px; align-items: flex-end;
+}
+.form-group {
+  display: flex; flex-direction: column;
+  gap: 6px; flex: 1;
+}
+.form-group label {
+  font-size: 0.7rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: rgba(232,232,240,0.5);
+}
+.form-group input {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 2px; padding: 11px 14px;
+  color: #e8e8f0; font-family: 'Barlow', sans-serif;
+  font-size: 0.92rem; outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus { border-color: rgba(240,180,41,0.5); }
+.form-group input.invalid { border-color: #E53E3E; }
+.field-error { font-size: 0.72rem; color: #fc8181; }
+.form-btns { display: flex; gap: 8px; }
+.btn-cancel {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(232,232,240,0.6); border-radius: 2px;
+  padding: 11px 18px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-cancel:hover { border-color: rgba(255,255,255,0.2); }
+
+/* TEAMS GRID */
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+.team-card {
+  background: #12121a;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 4px; padding: 20px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.team-card:hover {
+  border-color: rgba(240,180,41,0.3);
+  transform: translateY(-2px);
+}
+.team-icon { font-size: 2rem; }
+.team-name {
+  font-size: 0.92rem; font-weight: 700;
+  text-align: center;
+}
+.team-actions { display: flex; gap: 8px; }
+.btn-icon {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 2px; padding: 5px 8px;
+  color: rgba(232,232,240,0.5);
+  cursor: pointer; font-size: 0.8rem;
+  transition: all 0.15s;
+}
+.btn-icon:hover {
+  border-color: #F0B429; color: #F0B429;
+}
+.btn-icon.danger:hover {
+  border-color: #E53E3E; color: #E53E3E;
+}
+
+/* MISC */
+.success-msg {
+  background: rgba(72,187,120,0.1);
+  border: 1px solid rgba(72,187,120,0.3);
+  color: #68d391; border-radius: 2px;
+  padding: 10px 14px; font-size: 0.82rem;
+  margin-bottom: 16px;
+}
+.error-msg {
+  background: rgba(229,62,62,0.1);
+  border: 1px solid rgba(229,62,62,0.3);
+  color: #fc8181; border-radius: 2px;
+  padding: 10px 14px; font-size: 0.82rem;
+  margin-bottom: 16px;
+}
+.empty-state {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 14px;
+  padding: 60px; color: rgba(232,232,240,0.4);
+}
+.empty-icon { font-size: 3rem; }
+.spinner-wrap {
+  display: flex; justify-content: center; padding: 60px;
+}
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(255,255,255,0.07);
+  border-top-color: #F0B429; border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { padding: 24px; }
+  .form-row { flex-direction: column; }
+  .header-btns { flex-direction: column; }
+}

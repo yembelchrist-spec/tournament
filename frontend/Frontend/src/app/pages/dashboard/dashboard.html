@@ -1,0 +1,155 @@
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">MBOA PLAY</div>
+
+    <div class="sidebar-section">Navigation</div>
+    <a class="nav-item active">
+      <span>🏆</span> Mes Tournois
+    </a>
+    <a class="nav-item" routerLink="/tournaments">
+      <span>📋</span> Liste complète
+    </a>
+    <a class="nav-item" routerLink="/tournaments/new">
+      <span>➕</span> Nouveau tournoi
+    </a>
+
+    <div class="sidebar-footer">
+      <div class="user-pill">
+        <div class="avatar">U</div>
+        <div class="user-info">
+          <div class="user-name">Mon compte</div>
+          <div class="user-role">Organisateur</div>
+        </div>
+        <button class="logout-btn" (click)="logout()">↩</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub">Bienvenue sur votre espace de gestion</p>
+      </div>
+      <a class="btn-create" routerLink="/tournaments/new">
+        ＋ Nouveau tournoi
+      </a>
+    </div>
+
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card gold">
+        <div class="stat-label">Total tournois</div>
+        <div class="stat-value">{{ totalTournaments }}</div>
+        <div class="stat-sub">Tous statuts confondus</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">En cours</div>
+        <div class="stat-value">{{ activeTournaments }}</div>
+        <div class="stat-sub">Tournois actifs</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">Terminés</div>
+        <div class="stat-value">{{ finishedTournaments }}</div>
+        <div class="stat-sub">Compétitions clôturées</div>
+      </div>
+      <div class="stat-card gray">
+        <div class="stat-label">Brouillons</div>
+        <div class="stat-value">{{ draftTournaments }}</div>
+        <div class="stat-sub">En préparation</div>
+      </div>
+    </div>
+
+    <!-- Spinner -->
+    @if (isLoading) {
+      <div class="spinner-wrap">
+        <div class="spinner"></div>
+        <p>Chargement des tournois...</p>
+      </div>
+    }
+
+    <!-- Erreur -->
+    @if (errorMsg && !isLoading) {
+      <div class="error-msg">⚠ {{ errorMsg }}</div>
+    }
+
+    <!-- Panel -->
+    @if (!isLoading) {
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Mes tournois</span>
+          <span class="badge badge-gold">{{ tournaments.length }} tournoi(s)</span>
+        </div>
+
+        @if (tournaments.length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">🏆</div>
+            <p>Vous n'avez pas encore de tournoi.</p>
+            <a class="btn-create" routerLink="/tournaments/new">
+              Créer mon premier tournoi
+            </a>
+          </div>
+        }
+
+        @if (tournaments.length > 0) {
+          <table>
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Format</th>
+                <th>Équipes</th>
+                <th>Date début</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (t of tournaments; track t.id) {
+                <tr>
+                  <td>
+                    <div class="td-name">{{ t.name }}</div>
+                    <div class="td-muted">{{ t.location || 'Lieu non défini' }}</div>
+                  </td>
+                  <td>{{ getFormatLabel(t.format) }}</td>
+                  <td>{{ t.nb_teams }} / {{ t.max_teams }}</td>
+                  <td>{{ t.start_date || '—' }}</td>
+                  <td>
+                    <span class="badge"
+                      [class.badge-green]="t.status === 'ongoing'"
+                      [class.badge-blue]="t.status === 'open'"
+                      [class.badge-gold]="t.status === 'draft'"
+                      [class.badge-gray]="t.status === 'finished'">
+                      {{ getStatusLabel(t.status) }}
+                    </span>
+                  </td>
+                  <td>
+                     <div class="action-btns">
+                        <a class="btn-icon"
+                          [routerLink]="['/tournaments', t.id, 'teams']"
+                          title="Équipes">👥</a>
+                        <a class="btn-icon"
+                          [routerLink]="['/tournaments', t.id, 'matches']"
+                          title="Matchs">🎮</a>
+                        <button class="btn-icon"
+                          (click)="editTournament(t.id!)">✏️</button>
+                        <button class="btn-icon danger"
+                          (click)="deleteTournament(t.id!)">🗑</button>
+                      </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+
+  </main>
+</div>

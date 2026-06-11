@@ -1,0 +1,68 @@
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="page">
+  <div class="bg-video">
+    <video autoplay muted loop playsinline>
+      <source src="assets/videos/arena.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="bg-overlay"></div>
+
+  <a class="back-link" routerLink="/">← Retour</a>
+
+  <div class="card-wrapper">
+    <div class="brand">MBOA PLAY</div>
+    <h1 class="card-title">Connexion</h1>
+    <p class="card-sub">Accédez à votre espace de gestion</p>
+
+    <div class="card">
+      <div class="card-top-bar"></div>
+
+      @if (errorMsg) {
+        <div class="error-msg">⚠ {{ errorMsg }}</div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div class="form-group">
+          <label>Nom d'utilisateur</label>
+          <input type="text" formControlName="username"
+            placeholder="MonPseudo"
+            [class.invalid]="loginForm.get('username')?.invalid &&
+                             loginForm.get('username')?.touched">
+          @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+            <span class="field-error">Ce champ est requis</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <div class="input-wrapper">
+            <input [type]="showPassword ? 'text' : 'password'"
+              formControlName="password" placeholder="••••••••"
+              [class.invalid]="loginForm.get('password')?.invalid &&
+                               loginForm.get('password')?.touched">
+            <button type="button" class="eye-btn"
+              (click)="togglePassword()">
+              {{ showPassword ? '🙈' : '👁' }}
+            </button>
+          </div>
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <span class="field-error">Ce champ est requis</span>
+          }
+        </div>
+
+        <button class="btn-submit" type="submit" [disabled]="isLoading">
+          @if (isLoading) {
+            <span class="spinner"></span>
+          }
+          <span>{{ isLoading ? 'Connexion...' : 'Se connecter →' }}</span>
+        </button>
+      </form>
+
+      <p class="switch-link">
+        Pas encore de compte ?
+        <a routerLink="/register">S'inscrire</a>
+      </p>
+    </div>
+  </div>
+</div>

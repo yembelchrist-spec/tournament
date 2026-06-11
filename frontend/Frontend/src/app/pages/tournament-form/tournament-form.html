@@ -1,0 +1,107 @@
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="page">
+  <div class="page-header">
+    <a class="back-link" routerLink="/dashboard">← Dashboard</a>
+    <div class="logo">MBOA PLAY</div>
+  </div>
+
+  <div class="form-wrapper">
+    <h1 class="form-title">
+      {{ isEditMode ? 'Modifier le tournoi' : 'Nouveau tournoi' }}
+    </h1>
+    <p class="form-sub">
+      {{ isEditMode ? 'Mettez à jour les informations' : 'Remplissez les informations de votre tournoi' }}
+    </p>
+
+    @if (isLoading) {
+      <div class="spinner-wrap">
+        <div class="spinner"></div>
+      </div>
+    }
+
+    <div class="card">
+      <div class="card-top-bar"></div>
+
+       
+      @if (successMsg) {
+        <div class="success-msg">✓ {{ successMsg }}</div>
+      }
+      @if (errorMsg) {
+        <div class="error-msg">⚠ {{ errorMsg }}</div>
+      }
+
+      
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <label>Nom du tournoi *</label>
+          <input type="text" formControlName="name"
+            placeholder="Ex: Coupe de l'Est 2026"
+            [class.invalid]="form.get('name')?.invalid &&
+                              form.get('name')?.touched">
+          @if (form.get('name')?.errors?.['required'] && form.get('name')?.touched) {
+            <span class="field-error">Le nom est requis</span>
+          }
+          @if (form.get('name')?.errors?.['minlength'] && form.get('name')?.touched) {
+            <span class="field-error">Minimum 3 caractères</span>
+          }
+      </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Format *</label>
+              <select formControlName="format" title="Format de compétition">
+                <option value="elimination">Élimination directe</option>
+                <option value="round_robin">Round Robin</option>
+                <option value="groups_playoffs">Poules + Playoffs</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Statut *</label>
+              <select formControlName="status" title="Statut du tournoi">
+                <option value="draft">Brouillon</option>
+                <option value="open">Inscriptions ouvertes</option>
+                <option value="ongoing">En cours</option>
+                <option value="finished">Terminé</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Nombre max d'équipes *</label>
+            <input type="number" formControlName="max_teams" placeholder="8"
+              [class.invalid]="form.get('max_teams')?.invalid &&
+                               form.get('max_teams')?.touched">
+            @if (form.get('max_teams')?.invalid && form.get('max_teams')?.touched) {
+              <span class="field-error">Entre 2 et 64 équipes</span>
+            }
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date de début</label>
+              <input type="date" formControlName="start_date" placeholder="YYYY-MM-DD">
+            </div>
+            <div class="form-group">
+              <label>Lieu</label>
+              <input type="text" formControlName="location"
+                placeholder="Ex: Salle omnisports">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <a class="btn-cancel" routerLink="/dashboard">Annuler</a>
+            <button class="btn-submit" type="submit" [disabled]="isSaving">
+              @if (isSaving) {
+                <span class="spinner-sm"></span>
+              }
+              <span>{{ isSaving ? 'Enregistrement...' : (isEditMode ? 'Mettre à jour' : 'Créer le tournoi') }}</span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+    
+  </div>
+</div>

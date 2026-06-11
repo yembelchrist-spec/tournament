@@ -1,0 +1,241 @@
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">MBOA PLAY</div>
+    <div class="sidebar-section">Navigation</div>
+    <a class="nav-item" routerLink="/dashboard">
+      <span>🏠</span> Dashboard
+    </a>
+    <a class="nav-item"
+      [routerLink]="['/tournaments', tournamentId, 'teams']">
+      <span>👥</span> Équipes
+    </a>
+    <a class="nav-item active">
+      <span>🎮</span> Matchs
+    </a>
+    <div class="sidebar-footer">
+      <a class="btn-back" routerLink="/dashboard">← Retour</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">
+          {{ tournament?.name || 'Matchs' }}
+        </h1>
+        <p class="page-sub">
+          {{ matches.length }} match(s) — {{ teams.length }} équipes
+        </p>
+      </div>
+      <div class="header-btns">
+        <button class="btn-secondary" (click)="goToTeams()">
+          👥 Gérer les équipes
+        </button>
+        <button class="btn-create" (click)="openForm()">
+          ＋ Nouveau match
+        </button>
+      </div>
+    </div>
+
+    @if (successMsg) {
+      <div class="success-msg">✓ {{ successMsg }}</div>
+    }
+    @if (errorMsg) {
+      <div class="error-msg">⚠ {{ errorMsg }}</div>
+    }
+
+    <!-- Avertissement pas assez d'équipes -->
+    @if (!isLoading && teams.length < 2) {
+      <div class="warning-msg">
+        ⚠ Vous devez avoir au moins 2 équipes pour créer des matchs.
+        <a [routerLink]="['/tournaments', tournamentId, 'teams']">
+          Ajouter des équipes →
+        </a>
+      </div>
+    }
+
+    <!-- Formulaire match -->
+    @if (showForm && teams.length >= 2) {
+      <div class="form-card">
+        <div class="form-card-title">
+          {{ editingMatch ? 'Modifier le match' : 'Nouveau match' }}
+        </div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>Équipe A *</label>
+              <select formControlName="team_a" title="Équipe A">
+                <option value="">-- Choisir --</option>
+                @for (t of teams; track t.id) {
+                  <option [value]="t.id">{{ t.name }}</option>
+                }
+              </select>
+              @if (form.get('team_a')?.invalid && form.get('team_a')?.touched) {
+                <span class="field-error">Requis</span>
+              }
+            </div>
+
+            <div class="vs-label">VS</div>
+
+            <div class="form-group">
+              <label>Équipe B *</label>
+              <select formControlName="team_b" title="Équipe B">
+                <option value="">-- Choisir --</option>
+                @for (t of teams; track t.id) {
+                  <option [value]="t.id">{{ t.name }}</option>
+                }
+              </select>
+              @if (form.get('team_b')?.invalid && form.get('team_b')?.touched) {
+                <span class="field-error">Requis</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Date et heure</label>
+              <input type="datetime-local" formControlName="scheduled_at"
+                title="Date et heure du match">
+            </div>
+
+            <div class="form-group">
+              <label>Statut</label>
+              <select formControlName="status" title="Statut">
+                <option value="scheduled">Planifié</option>
+                <option value="ongoing">En cours</option>
+                <option value="finished">Terminé</option>
+              </select>
+            </div>
+
+          </div>
+          <div class="form-btns">
+            <button class="btn-create" type="submit">
+              {{ editingMatch ? 'Modifier' : 'Créer le match' }}
+            </button>
+            <button class="btn-cancel" type="button"
+              (click)="closeForm()">Annuler</button>
+          </div>
+        </form>
+      </div>
+    }
+
+    <!-- Liste matchs -->
+    @if (isLoading) {
+      <div class="spinner-wrap">
+        <div class="spinner"></div>
+      </div>
+    }
+
+    @if (!isLoading && matches.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">🎮</div>
+        <p>Aucun match programmé.</p>
+        @if (teams.length >= 2) {
+          <button class="btn-create" (click)="openForm()">
+            Créer le premier match
+          </button>
+        }
+      </div>
+    }
+
+    @if (!isLoading && matches.length > 0) {
+      <div class="matches-list">
+        @for (m of matches; track m.id) {
+          <div class="match-card">
+            <div class="match-status-bar"
+              [class.scheduled]="m.status === 'scheduled'"
+              [class.ongoing]="m.status === 'ongoing'"
+              [class.finished]="m.status === 'finished'">
+            </div>
+            <div class="match-body">
+
+              <!-- Teams & Score -->
+              <div class="match-teams">
+                <div class="team-side">
+                  <div class="team-label">{{ getTeamName(m.team_a) }}</div>
+                  @if (m.status === 'finished') {
+                    <div class="score">{{ m.score_a }}</div>
+                  }
+                </div>
+
+                <div class="match-center">
+                  <div class="vs">VS</div>
+                  <span class="badge"
+                    [class.badge-gray]="m.status === 'scheduled'"
+                    [class.badge-blue]="m.status === 'ongoing'"
+                    [class.badge-green]="m.status === 'finished'">
+                    {{ getStatusLabel(m.status) }}
+                  </span>
+                  @if (m.scheduled_at) {
+                    <div class="match-date">
+                      📅 {{ m.scheduled_at | date:'dd/MM/yyyy HH:mm' }}
+                    </div>
+                  }
+                </div>
+
+                <div class="team-side right">
+                  <div class="team-label">{{ getTeamName(m.team_b) }}</div>
+                  @if (m.status === 'finished') {
+                    <div class="score">{{ m.score_b }}</div>
+                  }
+                </div>
+              </div>
+
+              <!-- Score form -->
+              @if (updatingScoreId === m.id) {
+                <div class="score-form">
+                  <form [formGroup]="scoreForm"
+                    (ngSubmit)="updateScore(m.id!)">
+                    <div class="score-inputs">
+                      <div class="score-group">
+                        <label>{{ getTeamName(m.team_a) }}</label>
+                        <input type="number" formControlName="score_a"
+                          title="Score équipe A" min="0">
+                      </div>
+                      <span class="score-sep">—</span>
+                      <div class="score-group">
+                        <label>{{ getTeamName(m.team_b) }}</label>
+                        <input type="number" formControlName="score_b"
+                          title="Score équipe B" min="0">
+                      </div>
+                      <div class="score-group">
+                        <label>Statut</label>
+                        <select formControlName="status" title="Statut">
+                          <option value="ongoing">En cours</option>
+                          <option value="finished">Terminé</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-btns" style="margin-top:10px;">
+                      <button class="btn-create" type="submit">
+                        ✓ Enregistrer
+                      </button>
+                      <button class="btn-cancel" type="button"
+                        (click)="closeScoreForm()">Annuler</button>
+                    </div>
+                  </form>
+                </div>
+              }
+
+              <!-- Actions -->
+              <div class="match-actions">
+                @if (m.status !== 'finished') {
+                  <button class="btn-score"
+                    (click)="openScoreForm(m)">
+                    ⚽ Entrer le score
+                  </button>
+                }
+                <button class="btn-icon" (click)="openForm(m)">✏️</button>
+                <button class="btn-icon danger"
+                  (click)="deleteMatch(m.id!)">🗑</button>
+              </div>
+
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  </main>
+</div>

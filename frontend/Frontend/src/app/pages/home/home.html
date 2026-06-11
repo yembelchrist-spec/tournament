@@ -1,0 +1,79 @@
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="landing">
+
+  <div class="video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="assets/videos/arena.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="overlay-gradient"></div>
+
+  <nav>
+    <div class="logo">MBOA PLAY</div>
+    <div class="nav-btns">
+      <button class="btn-outline" (click)="goToLogin()">Connexion</button>
+      <button class="btn-primary" (click)="goToRegister()">S'inscrire</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-tag">
+      <span class="dot"></span>
+      Plateforme de gestion
+    </div>
+    <h1 class="hero-title">
+      DOMINEZ<br>VOS <em>TOURNOIS</em>
+    </h1>
+    <p class="hero-sub">
+      Organisez, gérez et suivez vos compétitions en temps réel.
+      Une plateforme pensée pour les champions.
+    </p>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">2 400+</div>
+        <div class="stat-label">Tournois créés</div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <div class="stat-num">18K</div>
+        <div class="stat-label">Participants</div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Satisfaction</div>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <button class="btn-gold" (click)="goToRegister()">
+        Commencer maintenant →
+      </button>
+      <button class="btn-ghost" (click)="goToLogin()">
+        J'ai déjà un compte
+      </button>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <div class="feature-title">Tournois illimités</div>
+      <div class="feature-desc">Créez autant de tournois que vous voulez, peu importe le format.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Temps réel</div>
+      <div class="feature-desc">Suivez les scores et classements en direct pendant vos compétitions.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">Formats variés</div>
+      <div class="feature-desc">Élimination directe, round robin, poules + playoffs — à vous de choisir.</div>
+    </div>
+  </div>
+
+</div>

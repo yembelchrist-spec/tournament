@@ -1,0 +1,117 @@
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">MBOA PLAY</div>
+    <div class="sidebar-section">Navigation</div>
+    <a class="nav-item" routerLink="/dashboard">
+      <span>🏠</span> Dashboard
+    </a>
+    <a class="nav-item active">
+      <span>👥</span> Équipes
+    </a>
+    <a class="nav-item"
+      [routerLink]="['/tournaments', tournamentId, 'matches']">
+      <span>🎮</span> Matchs
+    </a>
+    <div class="sidebar-footer">
+      <a class="btn-back" routerLink="/dashboard">← Retour</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">
+          {{ tournament?.name || 'Équipes' }}
+        </h1>
+        <p class="page-sub">
+          {{ teams.length }} / {{ tournament?.max_teams }} équipes inscrites
+        </p>
+      </div>
+      <div class="header-btns">
+        <button class="btn-secondary" (click)="goToMatches()">
+          🎮 Gérer les matchs
+        </button>
+        <button class="btn-create" (click)="openForm()">
+          ＋ Ajouter une équipe
+        </button>
+      </div>
+    </div>
+
+    @if (successMsg) {
+      <div class="success-msg">✓ {{ successMsg }}</div>
+    }
+    @if (errorMsg) {
+      <div class="error-msg">⚠ {{ errorMsg }}</div>
+    }
+
+    <!-- Formulaire ajout/modif -->
+    @if (showForm) {
+      <div class="form-card">
+        <div class="form-card-title">
+          {{ editingTeam ? 'Modifier l\'équipe' : 'Nouvelle équipe' }}
+        </div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nom de l'équipe *</label>
+              <input type="text" formControlName="name"
+                title="Nom de l'équipe"
+                placeholder="Ex: Les Lions"
+                [class.invalid]="form.get('name')?.invalid &&
+                                 form.get('name')?.touched">
+              @if (form.get('name')?.invalid && form.get('name')?.touched) {
+                <span class="field-error">Minimum 2 caractères</span>
+              }
+            </div>
+            <div class="form-btns">
+              <button class="btn-create" type="submit">
+                {{ editingTeam ? 'Modifier' : 'Ajouter' }}
+              </button>
+              <button class="btn-cancel" type="button"
+                (click)="closeForm()">Annuler</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    }
+
+    <!-- Liste équipes -->
+    @if (isLoading) {
+      <div class="spinner-wrap">
+        <div class="spinner"></div>
+      </div>
+    }
+
+    @if (!isLoading && teams.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">👥</div>
+        <p>Aucune équipe inscrite.</p>
+        <button class="btn-create" (click)="openForm()">
+          Ajouter la première équipe
+        </button>
+      </div>
+    }
+
+    @if (!isLoading && teams.length > 0) {
+      <div class="teams-grid">
+        @for (t of teams; track t.id) {
+          <div class="team-card">
+            <div class="team-icon">🏆</div>
+            <div class="team-name">{{ t.name }}</div>
+           <div class="team-actions">
+           <a class="btn-icon"
+            [routerLink]="['/teams', t.id, 'players']"
+                title="Gérer les joueurs">👤</a>
+            <button class="btn-icon" (click)="openForm(t)">✏️</button>
+            <button class="btn-icon danger"
+                (click)="deleteTeam(t.id!)">🗑</button>
+            </div>
+        </div>
+        }
+      </div>
+    }
+
+  </main>
+</div>

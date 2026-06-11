@@ -1,0 +1,104 @@
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="page">
+  <div class="bg-video">
+    <video autoplay muted loop playsinline>
+      <source src="assets/videos/arena.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="bg-overlay"></div>
+
+  <a class="back-link" routerLink="/">← Retour</a>
+
+  <div class="card-wrapper">
+    <div class="brand">MBOA PLAY</div>
+    <h1 class="card-title">Inscription</h1>
+    <p class="card-sub">Créez votre compte gratuitement</p>
+
+    <div class="card">
+      <div class="card-top-bar"></div>
+
+      @if (successMsg) {
+        <div class="success-msg">✓ {{ successMsg }}</div>
+      }
+      @if (errorMsg) {
+        <div class="error-msg">⚠ {{ errorMsg }}</div>
+      }
+
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+
+        <div class="form-group">
+          <label>Nom d'utilisateur</label>
+          <input type="text" formControlName="username"
+            placeholder="MonPseudo"
+            [class.invalid]="registerForm.get('username')?.invalid &&
+                             registerForm.get('username')?.touched">
+          @if (registerForm.get('username')?.errors?.['required'] &&
+               registerForm.get('username')?.touched) {
+            <span class="field-error">Ce champ est requis</span>
+          }
+          @if (registerForm.get('username')?.errors?.['minlength'] &&
+               registerForm.get('username')?.touched) {
+            <span class="field-error">Minimum 3 caractères</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Adresse e-mail</label>
+          <input type="email" formControlName="email"
+            placeholder="votre@email.com"
+            [class.invalid]="registerForm.get('email')?.invalid &&
+                             registerForm.get('email')?.touched">
+          @if (registerForm.get('email')?.invalid &&
+               registerForm.get('email')?.touched) {
+            <span class="field-error">Email invalide</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <div class="input-wrapper">
+            <input [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Minimum 8 caractères"
+              [class.invalid]="registerForm.get('password')?.invalid &&
+                               registerForm.get('password')?.touched">
+            <button type="button" class="eye-btn"
+              (click)="togglePassword()">
+              {{ showPassword ? '🙈' : '👁' }}
+            </button>
+          </div>
+          @if (registerForm.get('password')?.errors?.['minlength'] &&
+               registerForm.get('password')?.touched) {
+            <span class="field-error">Minimum 8 caractères</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Confirmer le mot de passe</label>
+          <input type="password" formControlName="password2"
+            placeholder="••••••••"
+            [class.invalid]="registerForm.errors?.['passwordMismatch'] &&
+                             registerForm.get('password2')?.touched">
+          @if (registerForm.errors?.['passwordMismatch'] &&
+               registerForm.get('password2')?.touched) {
+            <span class="field-error">Les mots de passe ne correspondent pas</span>
+          }
+        </div>
+
+        <button class="btn-submit" type="submit" [disabled]="isLoading">
+          @if (isLoading) {
+            <span class="spinner"></span>
+          }
+          <span>{{ isLoading ? 'Création...' : 'Créer mon compte →' }}</span>
+        </button>
+
+      </form>
+
+      <p class="switch-link">
+        Déjà un compte ?
+        <a routerLink="/login">Se connecter</a>
+      </p>
+    </div>
+  </div>
+</div>
