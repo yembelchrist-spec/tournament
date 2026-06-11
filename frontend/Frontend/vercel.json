@@ -1,7 +1,9 @@
 {
-    "buildCommand": "npm run build",
-    "outputDirectory": "dist/frontend/browser",
+    "outputDirectory": "dist/fronted",
     "rewrites": [
-        { "source" : "/(.*)", "destination" : "/index.html" }
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
     ]
 }
