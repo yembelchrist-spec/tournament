@@ -125,7 +125,8 @@ SIMPLE_JWT = {
 # CORS
 CORS_ALLOWED_ORIGINS = os.environ.get(
     'CORS_ALLOWED_ORIGINS',
-    'http://localhost:4200'
+    'http://localhost:4200',
+    'https://tournament-69jc.vercel.app',
 ).split(',')
 
 CORS_ALLOW_ALL_ORIGINS = True
